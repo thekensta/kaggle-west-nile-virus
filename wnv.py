@@ -48,6 +48,12 @@ def main():
     train = train.ix[:, pd.notnull(train).any(axis=0)]
     test = test.ix[:, pd.notnull(test).any(axis=0)]
 
+    def min_dist_to_spray_(x):
+        return wnvutils.min_dist_to_spray(x.Latitude, x.Longitude, spray)
+
+    train["DistToSpray"] = train.apply(min_dist_to_spray_, axis=1)
+    test["DistToSpray"] = test.apply(min_dist_to_spray_, axis=1)
+
     desc_df(train)
 
     imputer = Imputer()

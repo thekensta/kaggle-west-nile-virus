@@ -4,7 +4,10 @@
 
 __author__ = 'chrisk'
 
+
 import os
+
+from math import radians, sin, cos, sqrt, asin
 
 import pandas as pd
 import numpy as np
@@ -137,10 +140,32 @@ def clean_train_test2(train, test):
 
     return train, test
 
-from math import radians, sin, cos, sqrt, asin
+
+def euclidean_distance(x1, y1, x2, y2):
+    xd = (x1 - x2) ** 2
+    yd = (y1 - y2) ** 2
+    return np.sqrt(xd + yd)
+
+def haversine(lat1, lon1, lat2, lon2):
+    """Haversine distance from
+    http://rosettacode.org/wiki/Haversine_formula#Python
+    """
+
+    R = 6372.8 # Earth radius in kilometers
+
+    dLat = radians(lat2 - lat1)
+    dLon = radians(lon2 - lon1)
+    lat1 = radians(lat1)
+    lat2 = radians(lat2)
+
+    a = sin(dLat/2)**2 + cos(lat1)*cos(lat2)*sin(dLon/2)**2
+    c = 2*asin(sqrt(a))
+
+    return R * c
+
 
 def haversinea(lat1, lon1, lat2, lon2):
-    """Haversine distance from
+    """Haversine distance (numpy array version) from
     http://rosettacode.org/wiki/Haversine_formula#Python
     """
     R = 6372.8 # Earth radius in kilometers
@@ -150,6 +175,34 @@ def haversinea(lat1, lon1, lat2, lon2):
     lat2 = np.radians(lat2)
 
     a = np.sin(dLat/2)**2 + np.cos(lat1)*np.cos(lat2)*np.sin(dLon/2)**2
-    c = 2*np.arcsin(sqrt(a))
+    c = 2*np.arcsin(np.sqrt(a))
 
     return R * c
+
+
+def min_dist_to_spray(lat, lon, spray):
+    """Compute the minimum distance to a spray for a given lat, lon pair
+
+    N.B. Does NOT account for the year / season
+
+    Args:
+        lat - float Latitude
+        lon - float Longitude
+        spray - spray dataset with Series Latitude and Longitude
+
+    Returns
+        float - min distance to a spray in the dataset.
+
+    """
+
+    # Should really be array-like??
+    if isinstance(lat, float) or isinstance(lon, float):
+        N = spray.shape[0]
+        lata = np.empty(N)
+        lata.fill(lat)
+        lat = lata
+        lona = np.empty(N)
+        lona.fill(lon)
+        lon = lona
+    dist = haversinea(lat, lon, spray.Latitude.values, spray.Longitude.values)
+    return dist.min()
