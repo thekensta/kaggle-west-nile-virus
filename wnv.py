@@ -8,6 +8,7 @@ from sklearn.metrics import roc_auc_score
 
 import wnvutils
 
+
 def load_data():
 
     datasets = wnvutils.load_datasets("./input")
@@ -18,8 +19,10 @@ def load_data():
 
 
 def desc_df(df):
+    """Describe dataframe (checking transformations)"""
     print(df.shape)
     print(df.columns)
+
 
 def main():
 
@@ -65,7 +68,7 @@ def main():
     print("Accuracy:", (predictions == target[~training]).mean())
 
     predictions = rfc.predict_proba(traina[~training])
-    np.savetxt("/tmp/predictions.txt", predictions[:,1])
+    np.savetxt("/tmp/predictions.txt", predictions[:, 1])
 
     print(predictions[:,1])
     print("ROC AUC Score:", roc_auc_score(target[~training], predictions[:,1]))
