@@ -49,7 +49,10 @@ def load_datasets(inputdir):
     return datasets
 
 def clean_weather(weather):
-    """"""
+    """Weather cleaning similar to Kaggle Script
+
+    https://www.kaggle.com/abhishek/predict-west-nile-virus/vote-me-up
+    """
 
     weather.replace("M", float("NaN"), inplace=True)
     weather.replace("-", float("NaN"), inplace=True)
@@ -57,6 +60,16 @@ def clean_weather(weather):
     weather.replace(" T", float("NaN"), inplace=True)
     weather.replace("  T", float("NaN"), inplace=True)
     weather.drop("CodeSum", axis=1, inplace=True)
+
+    return merge_weather(weather)
+
+
+def merge_weather(weather):
+    """Merge weather from stations 1 and 2.
+
+    Returns station 1 and 2 independent features.
+
+    """
 
     weather1 = weather[weather["Station"] == 1]
     weather2 = weather[weather["Station"] == 2]
@@ -74,6 +87,10 @@ def clean_weather(weather):
     assert(rows1 == newrows)
 
     return weather
+
+def combine_weather(weather):
+    """Combine weather from stations 1 and 2"""
+
 
 def clean_train_test(train):
     """Clean up the test / training data. """

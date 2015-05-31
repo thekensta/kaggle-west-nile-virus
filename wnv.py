@@ -8,6 +8,7 @@ from sklearn.metrics import roc_auc_score
 
 import wnvutils
 
+
 def load_data():
 
     datasets = wnvutils.load_datasets("./input")
@@ -18,8 +19,10 @@ def load_data():
 
 
 def desc_df(df):
+    """Describe dataframe (checking transformations)"""
     print(df.shape)
     print(df.columns)
+
 
 def main():
 
@@ -53,19 +56,22 @@ def main():
 
     training = np.random.choice([True, False], size=train.shape[0], p=[0.8, 0.2])
 
-    rfc = ensemble.RandomForestClassifier(oob_score=True)
+    rfc = ensemble.RandomForestClassifier() #oob_score=True)
     rfc.fit(traina[training], target[training])
-    print("oob score:", rfc.oob_score_)
+    # print("oob score:", rfc.oob_score_)
 
-    for name, imp in sorted(zip(train.columns, rfc.feature_importances_),
-                            key=lambda x: x[1], reverse=True):
-        print(name, ":", imp)
+    #
+    with open("output/feature_imp.txt", "w") as fout:
+        for name, imp in sorted(zip(train.columns, rfc.feature_importances_),
+                                key=lambda x: x[1], reverse=True):
+            print(name, ":", imp)
+            print(name, ":", imp, file=fout)
 
     predictions = rfc.predict(traina[~training])
     print("Accuracy:", (predictions == target[~training]).mean())
 
     predictions = rfc.predict_proba(traina[~training])
-    np.savetxt("/tmp/predictions.txt", predictions[:,1])
+    np.savetxt("/tmp/predictions.txt", predictions[:, 1])
 
     print(predictions[:,1])
     print("ROC AUC Score:", roc_auc_score(target[~training], predictions[:,1]))
