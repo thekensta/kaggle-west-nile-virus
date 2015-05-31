@@ -56,7 +56,7 @@ def main():
 
     training = np.random.choice([True, False], size=train.shape[0], p=[0.8, 0.2])
 
-    rfc = ensemble.RandomForestClassifier() #oob_score=True)
+    rfc = ensemble.RandomForestClassifier() # oob_score=True)
     rfc.fit(traina[training], target[training])
     # print("oob score:", rfc.oob_score_)
 
