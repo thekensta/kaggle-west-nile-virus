@@ -91,6 +91,12 @@ def merge_weather(weather):
 def combine_weather(weather):
     """Combine weather from stations 1 and 2"""
 
+    weather1 = weather[weather["Station"] == 1]
+    weather2 = weather[weather["Station"] == 2]
+
+
+    pass
+
 
 def clean_train_test(train):
     """Clean up the test / training data. """
@@ -131,3 +137,19 @@ def clean_train_test2(train, test):
 
     return train, test
 
+from math import radians, sin, cos, sqrt, asin
+
+def haversinea(lat1, lon1, lat2, lon2):
+    """Haversine distance from
+    http://rosettacode.org/wiki/Haversine_formula#Python
+    """
+    R = 6372.8 # Earth radius in kilometers
+    dLat = np.radians(lat2 - lat1)
+    dLon = np.radians(lon2 - lon1)
+    lat1 = np.radians(lat1)
+    lat2 = np.radians(lat2)
+
+    a = np.sin(dLat/2)**2 + np.cos(lat1)*np.cos(lat2)*np.sin(dLon/2)**2
+    c = 2*np.arcsin(sqrt(a))
+
+    return R * c
