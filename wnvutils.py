@@ -29,6 +29,10 @@ from sklearn.preprocessing import LabelEncoder
 # 138 addresses
 #
 
+#
+# Starting from script
+# https://www.kaggle.com/abhishek/predict-west-nile-virus/vote-me-up
+#
 
 def load_datasets(inputdir):
     """Read the data files into a dict, keyed on filename. """
@@ -78,8 +82,9 @@ def clean_train_test(train):
     train["Year"] = train.Date.apply(lambda x: x.year)
     train["Day"] = train.Date.apply(lambda x: x.day)
 
-    train["Latitude_int"] = train.Latitude.apply(int)
-    train["Longitude_int"] = train.Longitude.apply(int)
+    # Doesn't actually seem to help
+    #train["Latitude_int"] = train.Latitude.apply(int)
+    #train["Longitude_int"] = train.Longitude.apply(int)
 
     c2d = ["Id", "Address", "AddressNumberAndStreet", "WnvPresent",
            "NumMosquitos"]

@@ -62,16 +62,14 @@ def main():
         print(name, ":", imp)
 
     predictions = rfc.predict(traina[~training])
-
     print("Accuracy:", (predictions == target[~training]).mean())
 
     predictions = rfc.predict_proba(traina[~training])
     np.savetxt("/tmp/predictions.txt", predictions[:,1])
-    print(predictions[:,1])
 
+    print(predictions[:,1])
     print("ROC AUC Score:", roc_auc_score(target[~training], predictions[:,1]))
 
-    print(test.shape)
 
 if __name__ == "__main__":
     main()

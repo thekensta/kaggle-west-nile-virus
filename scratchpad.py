@@ -1,6 +1,6 @@
 """scratchpad.py
 
-stuff to test out
+stuff to test out in sklearn
 
 """
 __author__ = 'chrisk'
